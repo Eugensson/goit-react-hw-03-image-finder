@@ -25,21 +25,29 @@ class App extends Component {
   componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.setState({ isLoading: true });
-      fetchImagesWithQuery(this.state.searchQuery, 1)
-        .then(data => {
+      try {
+        fetchImagesWithQuery(this.state.searchQuery, 1).then(data => {
           this.setState({ data, isLoading: false });
-        })
-        .catch(error => console.log(error));
-    } else if (prevState.page !== this.state.page) {
-      this.setState({ isLoading: true });
-      fetchImagesWithQuery(this.state.searchQuery, this.state.page)
-        .then(data => {
-          this.setState(prevState => ({
-            data: [...prevState.data, ...data],
-            isLoading: false,
-          }));
-        })
-        .catch(error => console.log(error));
+        });
+      } catch (error) {
+        console.log(error);
+      }
+    }
+
+    if (prevState.page !== this.state.page) {
+      try {
+        this.setState({ isLoading: true });
+        fetchImagesWithQuery(this.state.searchQuery, this.state.page).then(
+          data => {
+            this.setState(prevState => ({
+              data: [...prevState.data, ...data],
+              isLoading: false,
+            }));
+          }
+        );
+      } catch (error) {
+        console.log(error);
+      }
     }
   }
 
