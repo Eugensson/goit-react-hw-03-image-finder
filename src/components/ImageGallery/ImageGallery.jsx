@@ -1,19 +1,15 @@
-import { Component } from 'react';
 import PropTypes from 'prop-types';
 import ImageGalleryItem from 'components/ImageGalleryItem/ImageGalleryItem';
 import { ImageGalleryContainer } from 'components/ImageGallery/ImageGallery.styled';
 
-class ImageGallery extends Component {
-  render() {
-    const { data, modalClick } = this.props;
-    return (
-      <ImageGalleryContainer>
-        {data.map(item => (
-          <ImageGalleryItem key={item.id} item={item} modalClick={modalClick} />
-        ))}
-      </ImageGalleryContainer>
-    );
-  }
+function ImageGallery({ data, modalClick }) {
+  return (
+    <ImageGalleryContainer>
+      {data.map(item => (
+        <ImageGalleryItem key={item.id} item={item} modalClick={modalClick} />
+      ))}
+    </ImageGalleryContainer>
+  );
 }
 
 ImageGallery.propTypes = {
