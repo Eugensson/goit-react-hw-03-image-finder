@@ -3,11 +3,13 @@ import React from 'react';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
 import { fetchImagesWithQuery } from '../../services/api';
-import Searchbar from 'components/Searchbar/Searchbar';
-import ImageGallery from 'components/ImageGallery/ImageGallery';
-import LoadMoreButton from 'components/LoadMoreBtn/LoadMoreBtn';
-import Modal from 'components/Modal/Modal';
-import Loader from 'components/Loader/Loader';
+import {
+  Searchbar,
+  ImageGallery,
+  LoadMoreButton,
+  Modal,
+  Loader,
+} from 'components/index';
 import { AppContainer } from 'components/App/App.styled';
 
 class App extends Component {
