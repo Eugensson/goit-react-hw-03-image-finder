@@ -1,7 +1,9 @@
 import { Component } from 'react';
+import React from 'react';
+import { toast } from 'react-toastify';
 import PropTypes from 'prop-types';
 import { GoSearch } from 'react-icons/go';
-import { toast } from 'react-toastify';
+
 import {
   SearchbarContainer,
   SearchForm,
@@ -25,7 +27,17 @@ class Searchbar extends Component {
     e.preventDefault();
 
     if (this.state.searchQuery === '') {
-      toast('The input field must not be empty!');
+      toast.info('The input field must not be empty!', {
+        position: 'bottom-left',
+        autoClose: 3000,
+        hideProgressBar: false,
+        closeOnClick: true,
+        pauseOnHover: true,
+        draggable: true,
+        progress: undefined,
+        theme: 'dark',
+      });
+
       return;
     }
 
