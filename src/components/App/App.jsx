@@ -22,7 +22,7 @@ class App extends Component {
     isLoading: false,
   };
 
-  componentDidUpdate(prevProps, prevState) {
+  async componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
       this.setState({ isLoading: true });
       try {
