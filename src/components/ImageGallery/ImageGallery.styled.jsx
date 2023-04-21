@@ -5,6 +5,6 @@ export const ImageGalleryContainer = styled.ul`
   flex-wrap: wrap;
   justify-content: center;
   align-items: center;
-  padding: 40px;
-  gap: 40px;
+  padding: 20px;
+  gap: 20px;
 `;

@@ -1,12 +1,19 @@
-import { RotatingLines } from 'react-loader-spinner';
+import { Grid } from 'react-loader-spinner';
 
 function Loader() {
   return (
-    <RotatingLines
-      strokeColor="black"
-      strokeWidth="5"
-      animationDuration="0.75"
-      width="32"
+    <Grid
+      height="60"
+      width="60"
+      color="#000000"
+      ariaLabel="grid-loading"
+      radius="12.5"
+      wrapperStyle={{
+        display: 'flex',
+        justifyContent: 'center',
+        alignItems: 'center',
+      }}
+      wrapperClass=""
       visible={true}
     />
   );
