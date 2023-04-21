@@ -3,8 +3,6 @@ import PropTypes from 'prop-types';
 import { Overlay, ModalWindow } from 'components/Modal/Modal.styled';
 
 class Modal extends Component {
-  state = { isOpen: false, largeImageURL: '' };
-
   componentDidMount() {
     window.addEventListener('keydown', this.handleKeyDown);
   }

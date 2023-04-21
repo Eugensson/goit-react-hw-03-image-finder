@@ -18,7 +18,7 @@ class App extends Component {
     data: [],
     largeImageURL: '',
     page: 1,
-    isOpen: false,
+    showModal: false,
     isLoading: false,
   };
 
@@ -51,10 +51,6 @@ class App extends Component {
     }
   }
 
-  handleModalClick = largeImageURL => {
-    this.setState({ largeImageURL, isOpen: true });
-  };
-
   handleFormSubmit = searchQuery => {
     this.setState({ searchQuery });
   };
@@ -63,27 +59,26 @@ class App extends Component {
     this.setState(prevState => ({ page: prevState.page + 1 }));
   };
 
-  onModalClose = () => {
-    this.setState({ isOpen: false });
+  handleModalClick = largeImageURL => {
+    this.setState({ largeImageURL, showModal: true });
+  };
+
+  toggleModal = () => {
+    this.setState(({ showModal }) => ({ showModal: !showModal }));
   };
 
   render() {
+    const { data, isLoading, showModal, largeImageURL } = this.state;
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery
-          data={this.state.data}
-          modalClick={this.handleModalClick}
-        />
-        {this.state.isLoading && <Loader />}
-        {this.state.data.length > 0 ? (
+        <ImageGallery data={data} modalClick={this.handleModalClick} />
+        {isLoading && <Loader />}
+        {data.length > 0 ? (
           <LoadMoreButton handleLoadMore={this.handleLoadMore} />
         ) : null}
-        {this.state.isOpen && (
-          <Modal
-            largeImageURL={this.state.largeImageURL}
-            onClose={this.onModalClose}
-          />
+        {showModal && (
+          <Modal largeImageURL={largeImageURL} onClose={this.toggleModal} />
         )}
         <ToastContainer
           position="top-right"
