@@ -19,15 +19,15 @@ class App extends Component {
     largeImageURL: '',
     page: 1,
     showModal: false,
-    isLoading: false,
+    loading: false,
   };
 
-  async componentDidUpdate(prevProps, prevState) {
+  componentDidUpdate(prevProps, prevState) {
     if (prevState.searchQuery !== this.state.searchQuery) {
-      this.setState({ isLoading: true });
+      this.setState({ loading: true });
       try {
         fetchImagesWithQuery(this.state.searchQuery, 1).then(data => {
-          this.setState({ data, isLoading: false });
+          this.setState({ data, loading: false });
         });
       } catch (error) {
         console.log(error);
@@ -36,12 +36,12 @@ class App extends Component {
 
     if (prevState.page !== this.state.page) {
       try {
-        this.setState({ isLoading: true });
+        this.setState({ loading: true });
         fetchImagesWithQuery(this.state.searchQuery, this.state.page).then(
           data => {
             this.setState(prevState => ({
               data: [...prevState.data, ...data],
-              isLoading: false,
+              loading: false,
             }));
           }
         );
@@ -68,12 +68,12 @@ class App extends Component {
   };
 
   render() {
-    const { data, isLoading, showModal, largeImageURL } = this.state;
+    const { data, loading, showModal, largeImageURL } = this.state;
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleFormSubmit} />
         <ImageGallery data={data} modalClick={this.handleModalClick} />
-        {isLoading && <Loader />}
+        {loading && <Loader />}
         {data.length > 0 ? (
           <LoadMoreButton handleLoadMore={this.handleLoadMore} />
         ) : null}
