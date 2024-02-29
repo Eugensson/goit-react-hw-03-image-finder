@@ -1,6 +1,10 @@
 import { Component } from 'react';
+import { createPortal } from "react-dom";
 import PropTypes from 'prop-types';
-import { Overlay, ModalWindow } from 'components/Modal/Modal.styled';
+
+import { Backdrop, Content } from './Modal.styled';
+
+const modalRoot = document.querySelector('#modal-root');
 
 class Modal extends Component {
   componentDidMount() {
@@ -23,20 +27,21 @@ class Modal extends Component {
     }
   };
 
-  render() {
-    const { largeImageURL } = this.props;
-    return (
-      <Overlay onClick={this.handleBackdropClick}>
-        <ModalWindow>
-          <img src={largeImageURL} alt="" />
-        </ModalWindow>
-      </Overlay>
-    );
+  render() { 
+    const {children} = this.props;
+
+    return createPortal(
+      <Backdrop onClick={this.handleBackdropClick}>
+        <Content>
+          {children}
+        </Content>
+      </Backdrop>,
+      modalRoot)
   }
 }
 
 Modal.propTypes = {
-  largeImageURL: PropTypes.string.isRequired,
+  children: PropTypes.node,
   onClose: PropTypes.func.isRequired,
 };
 

@@ -1,35 +1,43 @@
 import { Component } from 'react';
-import React from 'react';
+
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
-import { fetchImagesWithQuery } from '../../services/api';
+
+import { fetchImagesWithQuery } from 'services/api';
+
 import {
   Searchbar,
   ImageGallery,
-  LoadMoreButton,
+  Button,
   Modal,
   Loader,
-} from 'components/index';
-import { AppContainer } from 'components/App/App.styled';
+  Notification,
+} from 'components';
+
+import { AppContainer } from './App.styled';
 
 class App extends Component {
   state = {
     searchQuery: '',
     data: [],
+    totalHits: 0,
     largeImageURL: '',
     page: 1,
     showModal: false,
     loading: false,
+    isSearch: false,
   };
 
   componentDidUpdate(prevProps, prevState) {
-    if (prevState.searchQuery !== this.state.searchQuery) {
+    const { searchQuery, page } = this.state;
+
+    if (prevState.searchQuery !== searchQuery) {
       this.setState({ loading: true });
-      fetchImagesWithQuery(this.state.searchQuery, 1)
-        .then(data => {
-          this.setState({ data, loading: false });
-        })
-        .catch(error => console.log(error));
+
+      fetchImagesWithQuery(searchQuery, page)
+        .then(data => this.setState({ data: data.hits, totalHits: data.totalHits,  loading: false, isSearch: true }))
+        .catch(error => console.log(error))
+        .finally(() => this.setState({ loading: false }));
     }
 
     if (prevState.page !== this.state.page) {
@@ -37,11 +45,11 @@ class App extends Component {
       fetchImagesWithQuery(this.state.searchQuery, this.state.page)
         .then(data => {
           this.setState(prevState => ({
-            data: [...prevState.data, ...data],
-            loading: false,
+            data: [...prevState.data, ...data.hits],
           }));
         })
-        .catch(error => console.log(error));
+        .catch(error => console.log(error))
+        .finally(() => this.setState({ loading: false }));
     }
   }
 
@@ -62,18 +70,19 @@ class App extends Component {
   };
 
   render() {
-    const { data, loading, showModal, largeImageURL } = this.state;
+    const { data, loading, showModal, largeImageURL, page, totalHits, isSearch } = this.state;
     return (
       <AppContainer>
         <Searchbar onSubmit={this.handleFormSubmit} />
-        <ImageGallery data={data} modalClick={this.handleModalClick} />
+        {data.length >0 && <ImageGallery data={data} modalClick={this.handleModalClick} />}
+        {isSearch && totalHits === 0 && !loading && <Notification message="No results were found for your request. Enter another images or photo name."/> }
         {loading && <Loader />}
-        {data.length > 0 ? (
-          <LoadMoreButton handleLoadMore={this.handleLoadMore} />
-        ) : null}
-        {showModal && (
-          <Modal largeImageURL={largeImageURL} onClose={this.toggleModal} />
-        )}
+        {data.length > 0 && page < totalHits / 12 && <Button handleLoadMore={this.handleLoadMore} />}
+        {showModal &&
+          <Modal onClose={this.toggleModal}>
+            <img src={largeImageURL} alt='' />
+          </Modal>
+        }
         <ToastContainer
           position="top-right"
           autoClose={3000}

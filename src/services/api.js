@@ -7,7 +7,7 @@ export const fetchImagesWithQuery = async (searchQuery, page) => {
     );
 
     if (response.status === 200) {
-      return response.data.hits;
+      return response.data;
     } else {
       throw new Error('Request failed with status code ' + response.status);
     }
